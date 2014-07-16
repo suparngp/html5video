@@ -1,0 +1,7 @@
+{
+  "id": "String",
+  "key": "String",
+  "passcode": "String",
+  "createdAt": "Date",
+  "userId": "String- user's id for whom this pair code is generated"
+}

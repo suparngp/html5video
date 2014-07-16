@@ -1,0 +1,9 @@
+{
+  "id": "String",
+  "name": "String",
+  "sourceUrl": "String- url of the page from where user picked up the media's url",
+  "url": "String", 
+  "userId": "String, user's id who added this media",
+  "createdAt": "Date",
+  "updatedAt": "Date"
+}

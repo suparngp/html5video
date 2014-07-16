@@ -1,0 +1,16 @@
+{
+  "id": "String",
+  "firstName": "String",
+  "lastName": "String",
+  "country": "String",
+  "emailId": "String",
+  "password": "String",
+  "devices": ["Device Object"],
+  "media": ["Media Object"],
+  "pairCodes": ["Pair Code"],
+  "nextPairCode": {
+  },
+  "createdAt": "Date",
+  "updatedAt": "Date",
+  "isActive": "boolean"
+}

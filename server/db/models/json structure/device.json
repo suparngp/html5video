@@ -1,0 +1,8 @@
+{
+  "id": "String",
+  "name": "String",
+  "type": "String",
+  "model": "Year, String",
+  "os": "String",
+  "pairCode": "String, referring to pair code"
+}
