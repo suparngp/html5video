@@ -3,8 +3,7 @@
  */
 
 'use strict';
-var globals = require('../../globals/globals');
-var mongoose = globals.getDBConnection();
+var mongoose = require('mongoose');
 
 var mediaSchema = mongoose.Schema({
     name: String,

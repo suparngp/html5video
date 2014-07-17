@@ -5,16 +5,17 @@
 
 'use strict';
 
-var globals = require('../../globals/globals');
-var mongoose = globals.getDBConnection();
+var user = module.exports;
+var mongoose = require('mongoose');
+var Q = require('q');
 
-var userSchema = mongoose.Schema({
+user.userSchema = mongoose.Schema({
     firstName: String,
     lastName: String,
     country: String,
     emailId: String,
     password: String,
-    devices: {type: mongoose.Schema.Types.ObjectId, ref: 'Device'},
+    devices: [],
     media: [],
     pairCodes: [],
     nextPairCode: {type: mongoose.Schema.Types.ObjectId, ref: 'PairCode'},
@@ -23,6 +24,22 @@ var userSchema = mongoose.Schema({
     isActive: Boolean
 });
 
-var User = mongoose.model('User', userSchema);
+user.User = mongoose.model('User', user.userSchema);
 
-exports.User = User;
+/**
+ * creates an instance of user with the given properties.
+ * @param properties the properties of the user
+ */
+user.create = function(properties){
+    var defer = Q.defer();
+    var instance = new user.User(properties);
+    instance.save(function (err, user) {
+        if(err){
+            defer.reject({reason: err});
+        }
+        else{
+            defer.resolve(user);
+        }
+    });
+    return defer.promise;
+};
