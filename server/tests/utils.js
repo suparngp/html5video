@@ -18,7 +18,7 @@ utils.createUser = function () {
         devices: [],
         media: [],
         pairCodes: [],
-        nextPairCode: mongoose.Types.ObjectId(),
+        nextPairCode: null,
         createdAt: date,
         updatedAt: date,
         isActive: true

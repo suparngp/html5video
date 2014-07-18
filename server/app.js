@@ -7,11 +7,17 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var init = require('./preprocess/init');
+var config = require('./preprocess/config');
+
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var signup = require('./routes/signup');
-var config = require('./preprocess/config');
+var session = require('./routes/session');
+
 var app = express();
+
+var sessionCtrl = require('./controllers/sessionCtrl');
+var redirectCtrl = require('./controllers/redirectCtrl');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -29,9 +35,22 @@ app.initServer = function () {
     app.use(require('less-middleware')(path.join(__dirname, 'public')));
     app.use(express.static(path.join(__dirname, 'public')));
 
+    app.all('/*', function(req, res, next){
+        req.tv = {};
+        next();
+    });
     app.use('/', routes);
     app.use('/users', users);
     app.use('/signup', signup);
+    app.use('/session', session);
+
+    //all the routes which require session verification go after this
+    app.all('/*', sessionCtrl.verifySession);
+
+    app.get('/dashboard', function(req, res, next){
+        res.json(200, {note: 'dashboard rendered'});
+    });
+
     /// catch 404 and forward to error handler
     app.use(function (req, res, next) {
         var err = new Error('Not Found');

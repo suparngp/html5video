@@ -30,16 +30,16 @@ paircode.PairCode = mongoose.model('PairCode', paircode.paircodeSchema);
  */
 paircode.create = function (properties) {
     var defer = Q.defer();
-    var instance = new paircode.PairCode(properties);
-    instance.save(function (err, pairCode) {
-        if (err) {
-            defer.reject({reason: err});
-        }
-        else {
-            instance = pairCode;
-            defer.resolve(pairCode);
-        }
-    });
+    var newPairCode = new paircode.PairCode(properties);
+    Q.nfcall(newPairCode.save.bind(newPairCode))
+        .then(function (instance) {
+            defer.resolve(instance[0]);
+        })
+        .catch(function (error) {
+            console.log(error);
+            defer.reject({reason: error});
+        })
+        .done();
     return defer.promise;
 };
 
@@ -50,6 +50,7 @@ paircode.create = function (properties) {
  */
 paircode.createUntilUnique = function (userId) {
     var deferred = Q.defer();
+
     function recursiveCreate() {
         var properties = {
             key: paircodeUtils.generateRandomPairKey(),
@@ -58,9 +59,9 @@ paircode.createUntilUnique = function (userId) {
             userId: userId
         };
         paircode.create(properties)
-            .then(function (paircodeInstance) {
+            .then(function (instance) {
 
-                deferred.resolve(paircodeInstance);
+                deferred.resolve(instance);
 
             }, function (error) {
                 if (error.reason.code === 11000) {
@@ -74,6 +75,7 @@ paircode.createUntilUnique = function (userId) {
                 deferred.reject({reason: error.reason || error});
             });
     }
+
     recursiveCreate();
     return deferred.promise;
 };

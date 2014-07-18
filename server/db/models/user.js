@@ -30,16 +30,28 @@ user.User = mongoose.model('User', user.userSchema);
  * creates an instance of user with the given properties.
  * @param properties the properties of the user
  */
-user.create = function(properties){
+user.create = function (properties) {
     var defer = Q.defer();
     var instance = new user.User(properties);
-    instance.save(function (err, user) {
-        if(err){
-            defer.reject({reason: err});
-        }
-        else{
-            defer.resolve(user);
-        }
-    });
+    Q.nfcall(instance.save.bind(instance))
+        .then(function (instance) {
+            defer.resolve(instance[0]);
+        })
+        .catch(function (error) {
+            defer.reject({reason: error});
+        })
+        .done();
     return defer.promise;
+};
+
+/**
+ * Finds a user instance by email id
+ * @param emailId the email id
+ * @return {Q.Promise<T>} a promise which gets resolved into user instance or undefined
+ */
+user.findByEmail = function (emailId) {
+    var query = {
+        emailId: emailId
+    };
+    return Q.nfcall(user.User.findOne.bind(user.User), query);
 };

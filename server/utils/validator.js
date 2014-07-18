@@ -5,12 +5,11 @@
 var validate = module.exports;
 var validator = require('validator');
 validate.email = function(emailId){
-    return validator.isEmail(emailId);
+    return !(!emailId || !validator.isEmail(emailId.toString().trim()));
 };
 
 validate.password = function(password){
-    if(!password)return false;
-    return !(password.length < 6 || password.length > 14);
+    return !(!password || password.length < 6 || password.length > 14);
 };
 
 validate.name = function(name){

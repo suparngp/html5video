@@ -9,6 +9,9 @@ var user = require('../db/models/user');
 var logger = require('winston');
 var crypt = require('../utils/crypt');
 var session = require('../db/models/session');
+var sessionCtrl = require('../controllers/sessionCtrl');
+var redirectCtrl = require('../controllers/redirectCtrl');
+
 router.route('/')
     .post(function (req, res, next) {
         var body = req.body;
@@ -49,38 +52,14 @@ router.route('/')
             updatedAt: currentDate,
             isActive: true
         };
-
-        function createSession(user){
-            var date = new Date();
-            var properties = {
-                token: crypt.session.token(),
-                userId: user._id,
-                createdAt: date,
-                updatedAt: date
-            };
-            session.create(properties)
-                .then(function(instance){
-                    console.log(instance);
-                    res.cookie('user_id', user._id, {signed: true, maxAge: 90000});
-                    res.cookie('auth_token', instance.token, {signed: true, maxAge: 90000});
-                    res.json(200, user);
-                }, function(error){
-                    logger.error(error);
-                    res.json(500, {reason: 'Internal Server Error'});
-                })
-                .catch(function(error){
-                    logger.error(error);
-                    res.json(500, {reason: 'Internal Server Error'});
-                });
-        }
-
         //create the user,
         user.create(properties)
             .then(function(instance){
                 logger.info(instance.toString());
-                createSession(instance);
-                console.log('Here');
-            }, function(error){
+                req.tv.user = instance;
+                next();
+            })
+            .catch(function(error){
                 logger.error(error);
                 if(error.reason && error.reason.code === 11000){
                     res.json(400, {reason: 'User already exists'});
@@ -89,10 +68,9 @@ router.route('/')
                     res.json(500, {reason: 'Internal Server Error'});
                 }
             })
-            .catch(function(error){
-                logger.error(error);
-                res.json(500, {reason: 'Internal Server Error'});
-            });
-    });
+            .done();
+    })
+    .post(sessionCtrl.findOrCreateSession)
+    .post(redirectCtrl.to.dashboard);
 
 module.exports = router;

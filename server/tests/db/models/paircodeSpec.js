@@ -35,10 +35,10 @@ describe('PairCode Model', function(){
                 expect(instance.userId).to.not.be.undefined;
                 expect(instance.createdAt).to.not.be.undefined;
                 done();
-            },
-            function(error){
-                console.log(error.reason.code);
-                done(error.toString());
+            })
+            .catch(function (error) {
+                console.log(error);
+                done(error);
             });
     });
 
