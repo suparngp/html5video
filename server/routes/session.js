@@ -53,7 +53,12 @@ router.route('/*')
 router.route('/logout')
     .post(function (req, res, next) {
         var currentSession = req.tv.session;
-        session.remove(currentSession.userId, currentSession.token)
+        var query = {
+            userId: currentSession.userId,
+            token: currentSession.token
+        };
+
+        session.removeOne(query)
             .then(function () {
                 cookie.clear.session(res);
                 next()

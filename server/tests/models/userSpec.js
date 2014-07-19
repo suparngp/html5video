@@ -2,11 +2,23 @@
  * Created by IronMan on 7/17/14.
  */
 
-describe.only('User Model', function(){
+describe('User Model', function(){
     var expect = require('chai').expect;
     var utils = require('../utils');
     var user = null;
     var faker = require('faker');
+    var init = require('../../preprocess/init');
+
+    before(function (done) {
+        var promise = init.loadDBConnection('development');
+        promise.then(function () {
+            done();
+        })
+            .catch(function (error) {
+                done(error);
+            });
+    });
+
     beforeEach(function(){
         require('../../app');
         user = require('../../models/user');

@@ -14,7 +14,7 @@ var cookie = require('../utils/cookie');
  */
 sessionCtrl.findOrCreateSession = function (req, res, next) {
     var user = req.tv.user;
-    var promise = session.findOrCreate(user._id);
+    var promise = session.findOrCreate({userId: user._id});
     promise
         .then(function (instance) {
             req.tv.session = instance;
@@ -43,7 +43,11 @@ sessionCtrl.verifySession = function (req, res, next) {
         return;
     }
 
-    session.find(userId, token)
+    var query = {
+        userId: userId,
+        token: token
+    };
+    session.findOne(query)
         .then(function (instance) {
             if(instance){
                 req.tv.session = instance;
