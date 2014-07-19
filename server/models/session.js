@@ -6,7 +6,7 @@
 var session = module.exports;
 
 var mongoose = require('mongoose');
-var crypt = require('../../utils/crypt');
+var crypt = require('../utils/crypt');
 var Q = require('q');
 var logger = require('winston');
 session.sessionSchema = mongoose.Schema({
@@ -105,10 +105,10 @@ session.find = function (userId, token) {
 session.remove = function (userId, token) {
     if (typeof userId === 'string')
         userId = mongoose.Types.ObjectId(userId);
-
     var query = {
         userId: userId,
         token: token
     };
     return Q.nfcall(session.Session.findOneAndRemove.bind(session.Session), query);
 };
+

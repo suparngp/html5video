@@ -5,10 +5,10 @@
 var express = require('express');
 var router = express.Router();
 var validate = require('../utils/validator');
-var user = require('../db/models/user');
+var user = require('../models/user');
 var logger = require('winston');
 var crypt = require('../utils/crypt');
-var session = require('../db/models/session');
+var session = require('./session');
 var sessionCtrl = require('../controllers/sessionCtrl');
 var redirectCtrl = require('../controllers/redirectCtrl');
 

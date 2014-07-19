@@ -3,7 +3,7 @@
  */
 
 var paircodeUtils = module.exports;
-var paircode = require('../db/models/paircode');
+var paircode = require('../models/paircode');
 var Q = require('q');
 
 paircodeUtils.generateRandomPairKey= function(){
