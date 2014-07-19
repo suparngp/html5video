@@ -11,7 +11,7 @@ var redirectCtrl = require('../controllers/redirectCtrl');
 var user = require('../models/user');
 var validate = require('../utils/validator');
 var crypt = require('../utils/crypt');
-var session = require('./session');
+var session = require('../models/session');
 var cookie = require('../utils/cookie');
 
 router.route('/login')

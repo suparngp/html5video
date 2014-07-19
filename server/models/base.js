@@ -24,7 +24,7 @@ base.extend = function (override) {
                 defer.resolve(instance[0]);
             })
             .catch(function (error) {
-                defer.reject({reason: error[0]});
+                defer.reject({reason: error});
             })
             .done();
         return defer.promise;

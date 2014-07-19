@@ -3,15 +3,18 @@
  */
 
 'use strict';
-var paircode = {};
+var paircode = module.exports;
+var base = require('./base');
 var mongoose = require('mongoose');
 var Q = require('q');
 var paircodeUtils = require('../utils/paircodeUtils');
+var logger = require("winston");
+
 
 /**
  * New PairCode schema
  */
-paircode.paircodeSchema = mongoose.Schema({
+paircode.Schema = mongoose.Schema({
     key: String,
     passcode: String,
     createdAt: Date,
@@ -21,35 +24,19 @@ paircode.paircodeSchema = mongoose.Schema({
     }
 });
 
-paircode.PairCode = mongoose.model('PairCode', paircode.paircodeSchema);
+paircode.Model = mongoose.model('PairCode', paircode.Schema);
 
-
-/**
- * Creates a new pair code
- * @param properties the properties for the new instance
- */
-paircode.create = function (properties) {
-    var defer = Q.defer();
-    var newPairCode = new paircode.PairCode(properties);
-    Q.nfcall(newPairCode.save.bind(newPairCode))
-        .then(function (instance) {
-            defer.resolve(instance[0]);
-        })
-        .catch(function (error) {
-            console.log(error);
-            defer.reject({reason: error});
-        })
-        .done();
-    return defer.promise;
-};
+base.extend(paircode);
 
 /**
  * Create a passcode with a unique key, keeps looping until such instance is created.
- * @param userId the user's id
+ * @param properties properties containing the user's id
  * @return {Q.Promise<T>} promise which gets resolved in the new instance
  */
-paircode.createUntilUnique = function (userId) {
+paircode.createUntilUnique = function (properties) {
+    properties = this.sanitizeQuery(properties);
     var deferred = Q.defer();
+    var userId = properties.userId;
 
     function recursiveCreate() {
         var properties = {
@@ -60,19 +47,16 @@ paircode.createUntilUnique = function (userId) {
         };
         paircode.create(properties)
             .then(function (instance) {
-
                 deferred.resolve(instance);
-
-            }, function (error) {
+            })
+            .catch(function (error) {
+                logger.error(error);
                 if (error.reason.code === 11000) {
                     recursiveCreate();
                 }
                 else {
                     deferred.reject({reason: error.reason || error});
                 }
-            })
-            .catch(function (error) {
-                deferred.reject({reason: error.reason || error});
             });
     }
 
@@ -80,5 +64,13 @@ paircode.createUntilUnique = function (userId) {
     return deferred.promise;
 };
 
+paircode.sanitizeQuery = function (query) {
+    if (!query) return query;
 
-module.exports = paircode;
+    if (query._id && typeof query._id === 'string')
+        query._id = mongoose.Types.ObjectId(query._id);
+
+    if (query.userId && typeof query.userId === 'string')
+        query.userId = mongoose.Types.ObjectId(query.userId);
+    return query;
+};

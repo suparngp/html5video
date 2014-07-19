@@ -62,10 +62,10 @@ session.findOrCreate = function (query) {
                     token: crypt.session.token(),
                     createdAt: date,
                     updatedAt: date,
-                    userId: userId
+                    userId: query.userId
                 };
 
-                var newSession = new session.Session(properties);
+                var newSession = new session.Model(properties);
 
                 Q.nfcall(newSession.save.bind(newSession))
                     .then(function (instance) {
@@ -78,7 +78,8 @@ session.findOrCreate = function (query) {
             }
         })
         .catch(function (error) {
-            deferred.reject({reason: error[0]});
+            console.log(error);
+            deferred.reject({reason: error});
         })
         .done();
     return deferred.promise;

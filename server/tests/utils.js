@@ -7,6 +7,8 @@ var utils = module.exports;
 var Faker = require('faker');
 var mongoose = require('mongoose');
 var crypt = require('../utils/crypt');
+var paircodeUtils = require('../utils/paircodeUtils');
+
 utils.createUser = function () {
     var date = new Date();
     return {
@@ -32,5 +34,14 @@ utils.createSession = function () {
         userId: mongoose.Types.ObjectId(),
         createdAt: date,
         updatedAt: date
+    };
+};
+
+utils.createPairCode = function () {
+    return{
+        key: paircodeUtils.generateRandomPairKey(),
+        passcode: paircodeUtils.generateRandomPassword(),
+        userId: mongoose.Types.ObjectId(),
+        createdAt: new Date()
     };
 };
