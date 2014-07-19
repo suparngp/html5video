@@ -50,8 +50,17 @@ sessionCtrl.verifySession = function (req, res, next) {
     session.findOne(query)
         .then(function (instance) {
             if(instance){
-                req.tv.session = instance;
-                next();
+                session.populate(instance, ['userId'])
+                    .then(function (populated) {
+                        req.tv.session = populated;
+                        req.tv.user = populated.userId;
+                        next();
+                    })
+                    .catch(function (error) {
+                        logger.error(error);
+                        res.json(500, {reason: 'Internal Server Error'});
+                    })
+                    .done();
             } else{
                 cookie.clear.session(res);
                 res.redirect('/');

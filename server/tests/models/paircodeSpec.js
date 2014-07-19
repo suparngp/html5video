@@ -8,6 +8,7 @@ describe('PairCode Model', function () {
     var utils = require('../utils');
     var pairCode = require('../../models/paircode');
     var mongoose = require('mongoose');
+    var user = require('../../models/user');
     var init = require('../../preprocess/init');
 
     before(function (done) {
@@ -135,6 +136,42 @@ describe('PairCode Model', function () {
                         pairCode.findOne(query)
                             .then(function (inst) {
                                 expect(inst).to.equal(null);
+                                done();
+                            })
+                            .catch(function (error) {
+                                console.log(error);
+                                done(error);
+                            });
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                        done(error);
+                    });
+            })
+            .catch(function (error) {
+                console.log(error);
+                done(error);
+            });
+    });
+
+    it.only('should populate user', function (done) {
+         var uprops = utils.createUser();
+        user.create(uprops)
+            .then(function (instance) {
+                expect(instance).to.not.be.undefined;
+                var pprops = utils.createPairCode();
+                pprops.userId = instance._id;
+                pairCode.create(pprops)
+                    .then(function (pair) {
+                        expect(pair).to.not.be.undefined;
+                        console.log(pair.populate);
+                        pairCode.populate(pair, ['userId'])
+                            .then(function (populated) {
+                                console.log(populated);
+                                expect(populated).to.not.be.undefined;
+                                expect(populated.userId._id.toString()).to.equal(instance._id.toString());
+                                populated.userId.remove();
+                                populated.remove();
                                 done();
                             })
                             .catch(function (error) {

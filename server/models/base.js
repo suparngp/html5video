@@ -45,6 +45,10 @@ base.extend = function (override) {
         return Q.nfcall(this.Model.findOne.bind(this.Model), query);
     };
 
+    override.populate = function(document, fields){
+        return Q.nfcall(document.populate.bind(document), fields);
+    };
+
     override.sanitizeQuery = function (query) {
         return query;
     };

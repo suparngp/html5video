@@ -13,6 +13,7 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var signup = require('./routes/signup');
 var session = require('./routes/session');
+var pair = require('./routes/pair');
 
 var app = express();
 
@@ -51,6 +52,7 @@ app.initServer = function () {
         res.json(200, {note: 'dashboard rendered'});
     });
 
+    app.use('/pair', pair);
     /// catch 404 and forward to error handler
     app.use(function (req, res, next) {
         var err = new Error('Not Found');

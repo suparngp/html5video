@@ -22,24 +22,6 @@ session.Model = mongoose.model('Session', session.Schema);
 
 base.extend(session);
 
-///**
-// * Creates a session instance
-// * @param properties the properties of the session
-// * @return {Q.Promise<T>} the promise which gets resolved into session instance
-// */
-//session.create = function (properties) {
-//    var defer = Q.defer();
-//    var instance = new session.Session(properties);
-//    Q.nfcall(instance.save.bind(instance))
-//        .then(function (instance) {
-//            defer.resolve(instance[0]);
-//        })
-//        .catch(function (error) {
-//            defer.reject({reason: error[0]});
-//        })
-//        .done();
-//    return defer.promise;
-//};
 
 /**
  * Finds an existing session or creates a new session for the user
@@ -78,42 +60,13 @@ session.findOrCreate = function (query) {
             }
         })
         .catch(function (error) {
-            console.log(error);
+            logger.info(error);
             deferred.reject({reason: error});
         })
         .done();
     return deferred.promise;
 };
 
-//
-///**
-// * Finds a session for the user
-// * @param {String}userId the user Id
-// * @param {String} token the token
-// * @return {Q.Promise<T>} a promise which gets resolved in the session if found or into undefined.
-// */
-//session.find = function (userId, token) {
-//    if (typeof userId === 'string')
-//        userId = mongoose.Types.ObjectId(userId);
-//
-//    return Q.nfcall(session.Session.findOne.bind(session.Session), {userId: userId, token: token});
-//};
-
-///**
-// * Removes a session from the data base
-// * @param userId the user id
-// * @param token the token
-// * @return {Q.Promise<T>} a promise which gets resolved into the deleted instance
-// */
-//session.remove = function (userId, token) {
-//    if (typeof userId === 'string')
-//        userId = mongoose.Types.ObjectId(userId);
-//    var query = {
-//        userId: userId,
-//        token: token
-//    };
-//    return Q.nfcall(session.Session.findOneAndRemove.bind(session.Session), query);
-//};
 
 session.sanitizeQuery = function (query) {
     if (!query) return query;
