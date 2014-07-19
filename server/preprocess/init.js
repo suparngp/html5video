@@ -13,7 +13,7 @@ var Q = require('q');
 /**
  * Loads the database connection.
  * @param env the environment, development or production
- * @return {Promise} a promise which is rejected if the database connection fails,
+ * @return {Q.Promise<T>} a promise which is rejected if the database connection fails,
  * or resolved if connection is successful.
  */
 var loadDBConnection = function (env) {

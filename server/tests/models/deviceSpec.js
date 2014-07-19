@@ -7,12 +7,11 @@ describe('Device Model', function(){
 
     var device = null;
     beforeEach(function(){
-        require('../../../app');
-        device = require('../../../db/models/device');
+        require('../../app');
+        device = require('../../models/device');
     });
 
     it('should load', function(){
-        device = require('../../../db/models/device');
         expect(device).to.not.be.undefined;
     });
 });

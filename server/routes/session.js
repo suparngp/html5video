@@ -8,10 +8,10 @@ var logger = require("winston");
 
 var sessionCtrl = require('../controllers/sessionCtrl');
 var redirectCtrl = require('../controllers/redirectCtrl');
-var user = require('../db/models/user');
+var user = require('../models/user');
 var validate = require('../utils/validator');
 var crypt = require('../utils/crypt');
-var session = require('../db/models/session');
+var session = require('./session');
 var cookie = require('../utils/cookie');
 
 router.route('/login')

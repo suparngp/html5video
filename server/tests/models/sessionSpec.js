@@ -3,12 +3,12 @@
  */
 describe('Session Model', function(){
     var expect = require('chai').expect;
-    var utils = require('../../utils');
+    var utils = require('../utils');
     var session = null;
     var mongoose = require('mongoose');
     beforeEach(function(){
-        require('../../../app');
-        session = require('../../../db/models/session');
+        require('../../app');
+        session = require('../../models/session');
     });
 
     it('should load', function(){

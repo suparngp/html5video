@@ -3,7 +3,7 @@
  */
 
 var sessionCtrl = module.exports;
-var session = require('../db/models/session');
+var session = require('../models/session');
 var logger = require('winston');
 var cookie = require('../utils/cookie');
 /**

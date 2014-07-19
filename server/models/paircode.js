@@ -6,7 +6,7 @@
 var paircode = {};
 var mongoose = require('mongoose');
 var Q = require('q');
-var paircodeUtils = require('../../utils/paircodeUtils');
+var paircodeUtils = require('../utils/paircodeUtils');
 
 /**
  * New PairCode schema

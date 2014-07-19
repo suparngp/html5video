@@ -8,14 +8,14 @@ describe('PairCode Model', function(){
 
     var pairCode = null;
     var mongoose = require('mongoose');
-    var paircodeUtils = require('../../../utils/paircodeUtils');
+    var paircodeUtils = require('../../utils/paircodeUtils');
     beforeEach(function(){
-        require('../../../app');
-        pairCode = require('../../../db/models/paircode');
+        require('../../app');
+        pairCode = require('../../models/paircode');
     });
 
     it('should load', function(){
-        pairCode = require('../../../db/models/paircode');
+        pairCode = require('../../models/paircode');
         expect(pairCode).to.not.be.undefined;
     });
 
