@@ -1,0 +1,9 @@
+{
+    "name": "tVideo",
+    "description": "tVideo - The smart TV beaming app",
+    "version": "1.0.0",
+    "url": "http://tvideo.com/",
+    "options": {
+        "outdir": "./docs/server"
+    }
+}

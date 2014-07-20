@@ -1,8 +1,13 @@
 /**
  * Created by IronMan on 7/18/14.
  */
+'use strict';
 
-
+/**
+ * The base model class for the DB models. Contains the CRUD and foundation methods
+ * @class Base
+ * @static
+ */
 var logger = require("winston");
 
 var Q = require('q');
@@ -37,6 +42,7 @@ base.extend = function (override) {
 
     override.updateOne = function (query, update, options) {
         query = this.sanitizeQuery(query);
+        options = options ? options : {};
         return Q.nfcall(this.Model.findOneAndUpdate.bind(this.Model), query, update, options);
     };
 

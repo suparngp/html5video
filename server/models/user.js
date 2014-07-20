@@ -4,47 +4,49 @@
  */
 
 'use strict';
+/**
+ * User model to manage users collection.
+ * @class User
+ * @static
+ * @extends Base
+ * */
 
 var user = module.exports;
 var mongoose = require('mongoose');
 var Q = require('q');
 var base = require('./base');
+/**
+ * @property firstName
+ * @type String
+ * */
 
-user.Schema = mongoose.Schema({
+/**
+ * @property lastName
+ * @type String
+ * */
+
+ user.Schema = mongoose.Schema({
     firstName: String,
     lastName: String,
     country: String,
     emailId: String,
     password: String,
-    devices: [],
+    devices: [{type: mongoose.Schema.Types.ObjectId, ref: 'Device'}],
     media: [],
-    pairCodes: [],
+    pairCodes: [{type: mongoose.Schema.Types.ObjectId, ref: 'PairCode'}],
     nextPairCode: {type: mongoose.Schema.Types.ObjectId, ref: 'PairCode'},
     createdAt: Date,
     updatedAt: Date,
     isActive: Boolean
 });
 
+/***
+ * Model class to create an instance of user
+ * @method Model
+ */
 user.Model = mongoose.model('User', user.Schema);
 base.extend(user);
 
-///**
-// * creates an instance of user with the given properties.
-// * @param properties the properties of the user
-// */
-//user.create = function (properties) {
-//    var defer = Q.defer();
-//    var instance = new this.Model(properties);
-//    Q.nfcall(instance.save.bind(instance))
-//        .then(function (instance) {
-//            defer.resolve(instance[0]);
-//        })
-//        .catch(function (error) {
-//            defer.reject({reason: error});
-//        })
-//        .done();
-//    return defer.promise;
-//};
 
 /**
  * Finds a user instance by email id

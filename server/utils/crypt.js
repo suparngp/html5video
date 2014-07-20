@@ -7,6 +7,7 @@ var crypt = module.exports;
 
 var crypto = require('crypto');
 var snowflake = require('node-snowflake').Snowflake;
+var hat = require('hat');
 
 crypt.password = {};
 
@@ -42,5 +43,17 @@ crypt.session.token = function () {
     var shasum = crypto.createHash('sha256');
     var id = snowflake.nextId();
     shasum.update(id);
+    return shasum.digest('hex');
+};
+
+crypt.pair = {};
+
+crypt.pair.connectToken = function (pairKey) {
+    var shasum = crypto.createHash('sha512');
+    var random = hat();
+    var timestamp = new Date().getTime();
+    shasum.update(pairKey.toString());
+    shasum.update(random);
+    shasum.update(timestamp.toString());
     return shasum.digest('hex');
 };

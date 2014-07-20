@@ -5,45 +5,72 @@
 var express = require('express');
 var router = express.Router();
 var paircode = require('../models/paircode');
+var device = require('../models/device');
 var user = require('../models/user');
 var logger = require("winston");
-
-
-router.route('/code')
+var sanitize = require('../utils/sanitize');
+var responseError = require('../utils/response-error');
+var pairingService = require('../services/pairingService');
+var crypt = require('../utils/crypt');
+router.route('/generate')
     .get(function (req, res, next) {
         var userIns = req.tv.user;
-
-        if(userIns.nextPairCode){
+        if (userIns.nextPairCode) {
             user.populate(userIns, ['nextPairCode'])
                 .then(function (populated) {
-                    req.tv.user = populated;
-                    res.json(200, populated.nextPairCode);
+                    res.json(200, sanitize.pairCode(populated.nextPairCode));
                 })
                 .catch(function (error) {
                     logger.error(error);
-                    res.json(500, {reason: 'Internal Server Error'});
+                    next(responseError.INTERNAL_SERVER_ERROR);
                 });
             return;
         }
 
-        paircode.createUntilUnique({userId: userIns._id})
-            .then(function (instance) {
-                logger.info(instance.toString());
-                user.updateOne({_id: userIns._id}, {nextPairCode: instance._id}, {'new': true})
-                    .then(function (updatedUser) {
-                        logger.info(updatedUser.toString());
-                        req.tv.user = updatedUser;
-                        res.json(200, instance);
-                    })
-                    .catch(function (error) {
-                        logger.error(error);
-                        res.json(500, {reason: 'Internal Server Error'});
-                    });
+        pairingService.createNewPairCode(userIns)
+            .then(function (result) {
+                res.json(200, sanitize.pairCode(result.pairCode));
             })
             .catch(function (error) {
-                logger.error(error);
-                res.json(500, {reason: 'Internal Server Error'});
+                next(error);
             });
     });
 
+
+router.route('/add')
+    .post(function (req, res, next) {
+        var data = req.body;
+        if (!data || !data.key || !data.passcode) {
+            next(responseError.MISSING_FIELDS);
+            return;
+        }
+
+        pairingService.verifyNewPairRequest({key: data.key, passcode: data.passcode, isUsed: false})
+            .then(function (result) {
+                var date = new Date();
+                result.device = {
+                    name: data.name ? data.name.toLowerCase() : '',
+                    type: data.type ? data.type.toLowerCase() : '',
+                    os: data.os ? data.os.toLowerCase() : '',
+                    model: data.model ? data.model.toLowerCase() : '',
+                    pairCodeId: result.pairCode._id,
+                    userId: result.user._id,
+                    authToken: crypt.pair.connectToken(data.key),
+                    createdAt: date,
+                    updatedAt: date
+                };
+
+                pairingService.pairNewDevice(result)
+                    .then(function (result) {
+                        logger.debug(result);
+                        res.json(200, sanitize.device(result.device));
+                    })
+                    .catch(function (error) {
+                        next(error);
+                    });
+            })
+            .catch(function (error) {
+                next(error);
+            });
+    });
 module.exports = router;

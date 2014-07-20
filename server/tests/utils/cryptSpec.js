@@ -2,20 +2,20 @@
  * Created by IronMan on 7/17/14.
  */
 
-describe('Crypt utility', function(){
+describe('Crypt utility', function () {
     var crypt = require('../../utils/crypt');
     var Faker = require('faker');
     var expect = require('chai').expect;
 
-    describe('namespace password', function(){
-        it('should hash a password', function(){
+    describe('namespace password', function () {
+        it('should hash a password', function () {
             var password = Faker.Name.firstName();
             var hash = crypt.password.hash(password);
             expect(hash).to.not.be.undefined;
             expect(hash.length).to.not.equal(0);
         });
 
-        it('should compare the two passwords correctly', function(){
+        it('should compare the two passwords correctly', function () {
             var password = Faker.Name.firstName();
             var hash = crypt.password.hash(password);
             expect(crypt.password.validate(password, hash)).to.be.ok;
@@ -23,11 +23,18 @@ describe('Crypt utility', function(){
         })
     });
 
-    describe('namespace session', function(){
-        it('should create a session token', function(){
+    describe('namespace session', function () {
+        it('should create a session token', function () {
             var token = crypt.session.token();
             expect(token).to.not.be.undefined;
             expect(token.length).to.not.equal(0);
+        });
+    });
+
+    describe('namespace pair', function () {
+        it('should generate connect token', function () {
+            var token = crypt.pair.connectToken(123456);
+            expect(token).to.not.be.undefined;
         });
     });
 });

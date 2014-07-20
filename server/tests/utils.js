@@ -42,6 +42,22 @@ utils.createPairCode = function () {
         key: paircodeUtils.generateRandomPairKey(),
         passcode: paircodeUtils.generateRandomPassword(),
         userId: mongoose.Types.ObjectId(),
-        createdAt: new Date()
+        createdAt: new Date(),
+        isUsed: false
+    };
+};
+
+utils.createDevice = function () {
+    return {
+        name: 'LGE',
+        type: 'Smart TV',
+        model: '60LB7000',
+        os: 'webos',
+        pairCode: mongoose.Types.ObjectId(),
+        userId: mongoose.Types.ObjectId(),
+        authToken: crypt.pair.connectToken(123456),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        isActive: true
     };
 };

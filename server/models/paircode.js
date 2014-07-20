@@ -21,7 +21,8 @@ paircode.Schema = mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
-    }
+    },
+    isUsed: Boolean
 });
 
 paircode.Model = mongoose.model('PairCode', paircode.Schema);
@@ -43,7 +44,8 @@ paircode.createUntilUnique = function (properties) {
             key: paircodeUtils.generateRandomPairKey(),
             passcode: paircodeUtils.generateRandomPassword(),
             createdAt: new Date(),
-            userId: userId
+            userId: userId,
+            isUsed: false
         };
         paircode.create(properties)
             .then(function (instance) {

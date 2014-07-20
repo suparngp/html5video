@@ -60,6 +60,7 @@ describe('PairCode Model', function () {
                 expect(instance.passcode).to.not.be.undefined;
                 expect(instance.userId).to.not.be.undefined;
                 expect(instance.createdAt).to.not.be.undefined;
+                expect(instance.isUser).to.not.be.ok;
                 instance.remove();
                 done();
             })
@@ -154,7 +155,7 @@ describe('PairCode Model', function () {
             });
     });
 
-    it.only('should populate user', function (done) {
+    it('should populate user', function (done) {
          var uprops = utils.createUser();
         user.create(uprops)
             .then(function (instance) {

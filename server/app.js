@@ -19,6 +19,7 @@ var app = express();
 
 var sessionCtrl = require('./controllers/sessionCtrl');
 var redirectCtrl = require('./controllers/redirectCtrl');
+var errorCtrl = require('./controllers/errorCtrl');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -44,7 +45,7 @@ app.initServer = function () {
     app.use('/users', users);
     app.use('/signup', signup);
     app.use('/session', session);
-
+    app.use('/pair/device', pair)
     //all the routes which require session verification go after this
     app.all('/*', sessionCtrl.verifySession);
 
@@ -52,37 +53,43 @@ app.initServer = function () {
         res.json(200, {note: 'dashboard rendered'});
     });
 
-    app.use('/pair', pair);
+    app.use('/pair/code', pair);
+
+    //error handlers
+    app.use(errorCtrl.handle404);
+    app.use(errorCtrl.handleErrResponse);
+
     /// catch 404 and forward to error handler
-    app.use(function (req, res, next) {
-        var err = new Error('Not Found');
-        err.status = 404;
-        next(err);
-    });
+//    app.use(function (req, res, next) {
+//        var err = new Error('Not Found');
+//        err.status = 404;
+//        next(err);
+//    });
+//
+//    /// error handlers
+//
+//    // development error handler
+//    // will print stacktrace
+//    if (app.get('env') === 'development') {
+//        app.use(function (err, req, res, next) {
+//            res.status(err.status || 500);
+//            res.render('error', {
+//                message: err.message,
+//                error: err
+//            });
+//        });
+//    }
+//
+//    // production error handler
+//    // no stacktraces leaked to user
+//    app.use(function (err, req, res, next) {
+//        res.status(err.status || 500);
+//        res.render('error', {
+//            message: err.message,
+//            error: {}
+//        });
+//    });
 
-    /// error handlers
-
-    // development error handler
-    // will print stacktrace
-    if (app.get('env') === 'development') {
-        app.use(function (err, req, res, next) {
-            res.status(err.status || 500);
-            res.render('error', {
-                message: err.message,
-                error: err
-            });
-        });
-    }
-
-    // production error handler
-    // no stacktraces leaked to user
-    app.use(function (err, req, res, next) {
-        res.status(err.status || 500);
-        res.render('error', {
-            message: err.message,
-            error: {}
-        });
-    });
     app.listen(3000, function(){
         console.log('server running at 3000');
     });
