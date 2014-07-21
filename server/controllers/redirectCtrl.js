@@ -2,7 +2,7 @@
  * Created by IronMan on 7/18/14.
  */
 
-var logger = require("winston");
+var logger = require('log4js').getLogger();
 
 var redirect = module.exports;
 

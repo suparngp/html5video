@@ -4,7 +4,7 @@
 
 var errorCtrl = module.exports;
 var responseError = require('../utils/response-error');
-var logger = require("winston");
+var logger = require('log4js').getLogger();
 
 
 errorCtrl.handle404 = function (req, res, next) {

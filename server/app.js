@@ -1,5 +1,5 @@
 var express = require('express');
-var winston = require('winston');
+var winston = require('log4js').getLogger();
 var path = require('path');
 var favicon = require('static-favicon');
 var logger = require('morgan');
@@ -14,6 +14,7 @@ var users = require('./routes/users');
 var signup = require('./routes/signup');
 var session = require('./routes/session');
 var pair = require('./routes/pair');
+var media = require('./routes/media');
 
 var app = express();
 
@@ -55,6 +56,7 @@ app.initServer = function () {
 
     app.use('/pair/code', pair);
 
+    app.use('/media', media);
     //error handlers
     app.use(errorCtrl.handle404);
     app.use(errorCtrl.handleErrResponse);
@@ -99,6 +101,7 @@ promise
     .then(app.initServer)
     .catch(function (err) {
         winston.error(err);
+        console.log(err);
         winston.error('Unable to start the server');
     });
 

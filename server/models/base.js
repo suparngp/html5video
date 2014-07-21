@@ -8,7 +8,7 @@
  * @class Base
  * @static
  */
-var logger = require("winston");
+var logger = require('log4js').getLogger();
 
 var Q = require('q');
 var mongoose = require('mongoose');

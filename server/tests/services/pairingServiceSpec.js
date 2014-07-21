@@ -2,7 +2,7 @@
  * Created by IronMan on 7/19/14.
  */
 
-describe.only('Pairing Service', function () {
+describe('Pairing Service', function () {
     var pairingService = require('../../services/pairingService');
     var expect = require('chai').expect;
     var paircode = require('../../models/paircode');

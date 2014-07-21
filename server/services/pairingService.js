@@ -14,7 +14,7 @@ var paircode = require('../models/paircode');
 var user = require('../models/user');
 var device = require('../models/device');
 var Q = require('q');
-var logger = require("winston");
+var logger = require('log4js').getLogger();
 var responseError = require('../utils/response-error');
 
 var service = module.exports;

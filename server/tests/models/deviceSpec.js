@@ -2,7 +2,7 @@
  * Created by IronMan on 7/16/14.
  */
 
-describe.only('Device Model', function () {
+describe('Device Model', function () {
     var expect = require('chai').expect;
     var utils = require('../utils');
     var device = require('../../models/device');

@@ -8,7 +8,7 @@ var session = module.exports;
 var mongoose = require('mongoose');
 var crypt = require('../utils/crypt');
 var Q = require('q');
-var logger = require('winston');
+var logger = require('log4js').getLogger();
 var base = require('./base');
 
 session.Schema = mongoose.Schema({

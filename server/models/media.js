@@ -4,16 +4,20 @@
 
 'use strict';
 var mongoose = require('mongoose');
+var base = require('./base');
+var media = module.exports;
 
-var mediaSchema = mongoose.Schema({
+media.Schema = mongoose.Schema({
     name: String,
     sourceUrl: String,
     url: String,
+    fileName: String,
     userId: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     createdAt: Date,
-    updatedAt: Date
+    updatedAt: Date,
+    isActive: Boolean
 });
 
-var Media = mongoose.model('Media', mediaSchema);
+media.Model = mongoose.model('Media', media.Schema);
 
-exports.Media = Media;
+base.extend(media);

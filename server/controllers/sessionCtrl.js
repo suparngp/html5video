@@ -4,7 +4,7 @@
 
 var sessionCtrl = module.exports;
 var session = require('../models/session');
-var logger = require('winston');
+var logger = require('log4js').getLogger();
 var cookie = require('../utils/cookie');
 /**
  * Finds or creates a new session if an existing session is not found

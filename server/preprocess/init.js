@@ -5,7 +5,7 @@
 
 var config = require('./config');
 var mongoose = require('mongoose');
-var logger = require('winston');
+var logger = require('log4js').getLogger();
 var connection = null;
 var Q = require('q');
 

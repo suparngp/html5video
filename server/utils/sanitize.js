@@ -32,3 +32,13 @@ sanitize.device = function (device) {
     delete clone.pairCodeId;
     return clone;
 };
+
+sanitize.media = function (media) {
+    var clone = media.toJSON();
+    clone.id = clone._id;
+    delete clone._id;
+    delete clone.updatedAt;
+    delete clone.__v;
+    delete clone.isActive;
+    return clone;
+};

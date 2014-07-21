@@ -4,7 +4,7 @@
 
 var express = require('express');
 var router = express.Router();
-var logger = require("winston");
+var logger = require('log4js').getLogger();
 
 var sessionCtrl = require('../controllers/sessionCtrl');
 var redirectCtrl = require('../controllers/redirectCtrl');

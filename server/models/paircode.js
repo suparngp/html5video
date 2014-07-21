@@ -8,7 +8,7 @@ var base = require('./base');
 var mongoose = require('mongoose');
 var Q = require('q');
 var paircodeUtils = require('../utils/paircodeUtils');
-var logger = require("winston");
+var logger = require('log4js').getLogger();
 
 
 /**
